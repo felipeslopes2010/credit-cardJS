@@ -73,19 +73,87 @@ const cardNumberPattern = {
 const cardNumberMasked = IMask(cardNumber, cardNumberPattern)
 
 const addButton = document.querySelector("#add-card")
+const appWrapper = document.querySelector("#app")
+const messageWrapper = document.querySelector("#message")
+
 addButton.addEventListener("click", () => {
-  alert("Cartão cadastrado com sucesso!")
+  let isFormComplete =
+    cardNumberMasked.masked.isComplete &&
+    cardHolder.value != "" &&
+    expirationDateMasked.masked.isComplete &&
+    String(securityCodeMasked.value).length >= 3
+
+  if (isFormComplete) {
+    appWrapper.classList.add("hide")
+    messageWrapper.classList.remove("hide")
+  } else {
+    checkCardNumber()
+    checkCardHolder()
+    checkExpirationDate()
+    checkSecurityCode()
+  }
 })
+
+const okButton = document.querySelector("#ok-message")
+okButton.addEventListener("click", () => {
+  window.location.reload()
+})
+
+document.querySelector("form").addEventListener("submit", (event) => {
+  event.preventDefault()
+})
+
+function checkCardNumber() {
+  if (cardNumberMasked.masked.isComplete) {
+    cardNumber.classList.remove("incomplete")
+    cardNumber.classList.add("complete")
+  } else {
+    cardNumber.classList.remove("complete")
+    cardNumber.classList.add("incomplete")
+  }
+}
+
+function checkCardHolder() {
+  if (cardHolder.value != "") {
+    cardHolder.classList.remove("incomplete")
+    cardHolder.classList.add("complete")
+  } else {
+    cardHolder.classList.remove("complete")
+    cardHolder.classList.add("incomplete")
+  }
+}
+
+function checkExpirationDate() {
+  if (expirationDateMasked.masked.isComplete) {
+    expirationDate.classList.remove("incomplete")
+    expirationDate.classList.add("complete")
+  } else {
+    expirationDate.classList.remove("complete")
+    expirationDate.classList.add("incomplete")
+  }
+}
+
+function checkSecurityCode() {
+  securityCode
+  if (String(securityCodeMasked.value).length >= 3) {
+    securityCode.classList.remove("incomplete")
+    securityCode.classList.add("complete")
+  } else {
+    securityCode.classList.remove("complete")
+    securityCode.classList.add("incomplete")
+  }
+}
 
 const cardHolder = document.querySelector("#card-holder")
 cardHolder.addEventListener("input", () => {
   const ccHolder = document.querySelector(".cc-holder .value")
-
-  ccHolder.innerText = cardHolder.value
+  ccHolder.textContent = cardHolder.value
+  checkCardHolder()
 })
 
 securityCodeMasked.on("accept", () => {
   updateSecurityCode(securityCodeMasked.value)
+  checkSecurityCode()
 })
 
 function updateSecurityCode(code) {
@@ -97,6 +165,7 @@ cardNumberMasked.on("accept", () => {
   const cardType = cardNumberMasked.masked.currentMask.cardtype
   setCardType(cardType)
   updateCardNumber(cardNumberMasked.value)
+  checkCardNumber()
 })
 
 function updateCardNumber(number) {
@@ -106,9 +175,10 @@ function updateCardNumber(number) {
 
 expirationDateMasked.on("accept", () => {
   updateExpirationDate(expirationDateMasked.value)
+  checkExpirationDate()
 })
 
 function updateExpirationDate(date) {
-  const ccExpiration = document.querySelector(".cc-extra .value")
+  const ccExpiration = document.querySelector(".cc-expiration .value")
   ccExpiration.innerText = date
 }

@@ -32,6 +32,20 @@ form input {
   text-transform: uppercase;
 }
 
+form input.complete {
+  border: 1px solid #0da600;
+}
+form input.complete:focus {
+  outline: 1px solid #0da600;
+}
+
+form input.incomplete {
+  border: 1px solid red;
+}
+form input.incomplete:focus {
+  outline: 1px solid red;
+}
+
 form .flex {
   gap: 1.4rem;
 }
@@ -40,7 +54,8 @@ form .flex .input-wrapper {
   flex: 1;
 }
 
-form button {
+form button,
+#message button {
   margin-top: 1.6rem;
 
   display: flex;
@@ -63,6 +78,7 @@ form button {
   transition: filter 0.3s;
 }
 
-form button:hover {
+form button:hover,
+#message button:hover {
   filter: brightness(1.1);
 }

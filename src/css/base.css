@@ -50,3 +50,8 @@ body {
   display: flex;
   align-items: center;
 }
+
+#app.hide,
+#message.hide {
+  display: none;
+}
